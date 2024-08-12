@@ -1,3 +1,3 @@
 from .openai import *
-from .gemini import GeminiProvider
+from .google import GoogleProvider
 from .claude import *

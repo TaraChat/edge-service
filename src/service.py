@@ -6,7 +6,14 @@ from .business.providers import GeminiProvider
 from typing import Literal
 
 
+PROVIDER = Literal[
+    "GOOGLE",
+    "OPENAI",
+    "ANTHROPIC",
+]
+
 MODEL = Literal[
+    # Google
     "gemini-1.5-flash",  # In (Audio, images, videos, and text)
     "gemini-1.5-pro",  # In (Audio, images, videos, and text)
     "gemini-1.0-pro",  # In Text
@@ -24,13 +31,19 @@ class EdgeService:
     @rpc
     def generate_content(self, provider: str, model: MODEL, *args, **kwargs) -> str:
         match provider:
-            case "openai":
+            case "OPENAI":
                 ...
-            case "claude":
+            case "ANTHROPIC":
                 ...
-            case "gemini":
-                response = GeminiProvider(model).generate_content(*args, **kwargs)
+            case "GOOGLE":
+                response = GoogleProvider(model).generate_content(*args, **kwargs)
                 text = response.text
             case _:
                 text = ""
         return text
+
+    @rpc
+    def get_cost(self, provider):
+        match provider:
+            case _:
+                ...
