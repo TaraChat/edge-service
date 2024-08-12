@@ -2,7 +2,7 @@ import logging
 from plugins.log import LoggerDependency
 from plugins.session import SessionDataDependency
 from nameko.rpc import rpc  # type: ignore
-from .business.providers import GeminiProvider
+from .business.providers import GoogleProvider
 from typing import Literal
 
 
