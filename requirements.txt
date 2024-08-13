@@ -4,5 +4,6 @@ openai
 pydantic
 requests
 python-dotenv
-google-generativeai
 pillow
+google-generativeai
+anthropic

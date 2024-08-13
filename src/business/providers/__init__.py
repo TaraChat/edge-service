@@ -1,3 +1,3 @@
-from .openai import *
+from .openai import OpenAIProvider
 from .google import GoogleProvider
-from .claude import *
+from .anthropic import AnthropicProvider
