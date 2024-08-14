@@ -1,21 +1,20 @@
-from openai import OpenAI
-import os
+import openai
 
 
 class OpenAIProvider:
+    def __init__(self, api_key):
+        openai.api_key = api_key
 
-    def __init__(self, model_name: str):
-        self.client = OpenAI(
-            api_key=os.environ.get("OPENAI_API_KEY"),
-        )
-        self.model_name = model_name
-
-    def generate_content(self, prompt: str, **kwargs):
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            prompt=prompt,
-            max_tokens=kwargs.get("max_tokens", 300),
-            temperature=kwargs.get("temperature", 1),
-            **kwargs
+    def generate_text(self, prompt, model, max_tokens=50):
+        response = openai.Completion.create(
+            engine=model, prompt=prompt, max_tokens=max_tokens
         )
         return response.choices[0].text.strip()
+
+    def stream_autocomplete(self, prompt, model):
+        completion = openai.Completion.create(
+            engine=model, prompt=prompt, max_tokens=50, stream=True
+        )
+        for message in completion:
+            if "choices" in message:
+                yield message["choices"][0]["text"]

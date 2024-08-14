@@ -42,28 +42,28 @@ class EdgeService:
     session_data: dict = SessionDataDependency()
     logger: logging.Logger = LoggerDependency()
 
-    @rpc
-    def generate_content(self, provider: str, model: MODEL, *args, **kwargs) -> str:
-        match provider.upper():
-            case "OPENAI":
-                response = OpenAIProvider(model).generate_content(*args, **kwargs)
-                text = response  # Assuming the OpenAIProvider's generate_content method returns the generated text directly
-            case "ANTHROPIC":
-                response = AnthropicProvider(model).generate_content(*args, **kwargs)
-                text = response  # Assuming the AnthropicProvider's generate_content method returns the generated text directly
-            case "GOOGLE":
-                response = GoogleProvider(model).generate_content(*args, **kwargs)
-                text = (
-                    response.text
-                )  # Assuming the GoogleProvider's response has a `text` attribute
-            case _:
-                text = "Invalid provider specified."
-        return text
+    def __init__(self):
+        self.providers = {
+            "OPENAI": OpenAIProvider(api_key="your-openai-api-key"),
+            "ANTHROPIC": AnthropicProvider(api_key="your-anthropic-api-key"),
+            "GOOGLE": GoogleProvider(api_key="your-google-api-key"),
+        }
 
     @rpc
-    def stream_generate_content(self):
-        yield
-        pass
+    def generate_text(self, provider: str, model: MODEL, *args, **kwargs) -> str:
+        provider_instance = self.providers.get(provider)
+        if provider_instance:
+            return provider_instance.generate_text(model, *args, **kwargs)
+        else:
+            return {"error": "Invalid provider"}
+
+    @rpc
+    def stream_autocomplete(self, provider, model, prompt):
+        provider_instance = self.providers.get(provider)
+        if provider_instance:
+            return list(provider_instance.stream_autocomplete(prompt, model))
+        else:
+            return {"error": "Invalid provider"}
 
     @rpc
     def get_cost(self, provider):

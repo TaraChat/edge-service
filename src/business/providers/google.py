@@ -10,5 +10,5 @@ class GoogleProvider:
     def __init__(self, model_name: str):
         self.model = genai.GenerativeModel(model_name=model_name)
 
-    def generate_content(self, *args, **kwargs):
+    def generate_text(self, *args, **kwargs):
         return self.model.generate_content(*args, **kwargs)

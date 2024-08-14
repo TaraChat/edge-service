@@ -8,7 +8,7 @@ class AnthropicProvider:
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_SECRET_KEY"))
         self.model_name = model_name
 
-    def generate_content(self, prompt: str, **kwargs):
+    def generate_text(self, prompt: str, **kwargs):
         response = self.client.messages.create(
             model=self.model_name,
             prompt=prompt,
